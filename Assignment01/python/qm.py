@@ -43,7 +43,18 @@ class QuineMcClusky:
         self.minterms=self.mintermstobinary()
         #Change the representation from integers to bits corresponding to variables
         #After getting the representation, apply the algo.
+        #Steps are
+        #@1: Find all the primes.
+        self.primes=self.findprimes(self.minterms)
         #To implement the algorithm
+
+    def findprimes(self,minterms):
+        #The tabular method for finding all the primes
+        p=[]
+        #To fill in
+        #
+        #code here
+        return p
 
     def mintermstobinary(self):
         newminterms=[]
