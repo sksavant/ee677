@@ -69,13 +69,33 @@ class QuineMcClusky:
         #The tabular method for finding all the primes
         p=[]
         #To fill in
-        self.orderbynumberof1s()
+        self.orderbynumberof1s() #order the minterms
+        #iterate through all adjacent minterms and get the those unticked into primes
+        loopedthroughall=False
+        while(not loopedthroughall):
+            for i in range(len(self.minterms)):
+                for j in range(i,self.minterms):
+                    if self.minterms[i][self.vars]+1==self.minterms[j][self.vars]:
+                        #no. of ones differ by 1; check if they differ by more than one element
+                        if len(set(self.minterms[i][0:self.vars]).intersection(set(self.minterms[j][0:self.vars])))==self.vars-1:
+                            #length of intersection is self.vars-1 implies self.vars-1 are same i.e, only 1 is different
+                            self.minterms[i][self.vars+1]=True
+                            self.minterms[j][self.vars+1]=True
+                            #Still to get new combined term into the nextterms array
+                            #
+                    elif self.minterms[i][self.vars]+1<self.minterms[j][self.vars]:
+                        if self.minterms[i][self.vars+1]==False: #If not merged with any of the one difference ones, it's an essential prime. Append it to the prime list
+                            p.append(self.minterms[i][0:self.vars])
+                        break #breaks out of one for loop or both?
+
+
         #code here
         return p
 
     def orderbynumberof1s(self):
         for i in range(len(self.minterms)):
             self.minterms[i].append(sum(self.minterms[i]))
+            self.minterms[i].append(False) #not ticked
         self.minterms=sorted(self.minterms, key=lambda x: x[self.vars])
 
     def mintermstobinary(self):
