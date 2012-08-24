@@ -68,9 +68,14 @@ class QuineMcClusky:
         #The tabular method for finding all the primes
         p=[]
         #To fill in
-        #
+        self.orderbynumberof1s()
         #code here
         return p
+
+    def orderbynumberof1s(self):
+        for i in range(len(self.minterms)):
+            self.minterms[i].append(sum(self.minterms[i]))
+        self.minterms=sorted(self.minterms, key=lambda x: x[self.vars])
 
     def mintermstobinary(self):
         newminterms=[]
