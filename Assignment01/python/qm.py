@@ -72,25 +72,68 @@ class QuineMcClusky:
         self.orderbynumberof1s() #order the minterms
         #iterate through all adjacent minterms and get the those unticked into primes
         loopedthroughall=False
+        nextterms=self.minterms
         while(not loopedthroughall):
-            for i in range(len(self.minterms)):
-                for j in range(i,self.minterms):
-                    if self.minterms[i][self.vars]+1==self.minterms[j][self.vars]:
+            next=[]
+            for i in range(len(nextterms)):
+                notchecked=True
+                notprimedyet=True
+                for j in range(i,len(nextterms)):
+                    if nextterms[i][self.vars]+1==nextterms[j][self.vars]:
                         #no. of ones differ by 1; check if they differ by more than one element
-                        if len(set(self.minterms[i][0:self.vars]).intersection(set(self.minterms[j][0:self.vars])))==self.vars-1:
+                        if self.do_terms_differ_more_than1(nextterms[i],nextterms[j]):
+                            notchecked=False
                             #length of intersection is self.vars-1 implies self.vars-1 are same i.e, only 1 is different
-                            self.minterms[i][self.vars+1]=True
-                            self.minterms[j][self.vars+1]=True
+                            nextterms[i][self.vars+1]=True
+                            nextterms[j][self.vars+1]=True
                             #Still to get new combined term into the nextterms array
-                            #
-                    elif self.minterms[i][self.vars]+1<self.minterms[j][self.vars]:
-                        if self.minterms[i][self.vars+1]==False: #If not merged with any of the one difference ones, it's an essential prime. Append it to the prime list
-                            p.append(self.minterms[i][0:self.vars])
-                        break #breaks out of one for loop or both?
-
-
+                            x=[]
+                            #Add the term with dash -1 in place of _
+                            nooofdc=0
+                            for k in range(self.vars):
+                                if nextterms[i][k]==nextterms[j][k]:
+                                    x.append(nextterms[i][k])
+                                    if(nextterms[i][k])==-1:
+                                        nooofdc=nooofdc+1
+                                else:
+                                    nooofdc=nooofdc+1
+                                    x.append(-1)
+                            x.append(sum(x)+nooofdc)
+                            x.append(False)
+                            if not x in next:
+                                next.append(x)
+                    elif nextterms[i][self.vars]+1<nextterms[j][self.vars]:
+                        if nextterms[i][self.vars+1]==False:
+                            notprimedyet=False
+                            #If not merged with any of the one difference ones, it's an essential prime. Append it to the prime list
+                            p.append(nextterms[i][0:self.vars])
+                            break #breaks out of one for loop or both?
+                if notchecked and notprimedyet:
+                    if nextterms[i][self.vars+1]==False:
+                        p.append(nextterms[i][0:self.vars])
+           # print "next"
+           # for e in next:
+           #     print e
+           # print
+            if len(next)==0:
+                loopedthroughall=True
+            else:
+                nextterms=next
         #code here
+        #print "primes"
+        #for e in p:
+        #    print e
         return p
+
+    def do_terms_differ_more_than1(self,term1,term2):
+        assert len(term1)==len(term2)
+        count=0
+        for i in range(len(term1)-2): #Ignore the last 2 elements i.e, the no.of ones and checked status
+            if not term1[i]==term2[i]:
+                count=count+1
+        if count==1:
+            return True
+        return False
 
     def orderbynumberof1s(self):
         for i in range(len(self.minterms)):
