@@ -64,6 +64,14 @@ class QuineMcClusky:
         #@1: Find all the primes.
         self.primes=self.findprimes(self.minterms)
         #To implement the algorithm
+        #@2:To do minimisation :
+        #   3 steps
+        #   @0. Eliminate identical rows (already guaranteed to be non-identical)
+        #   @1. Need to definitely have essential primes : Only one element in
+        #   column has a mark
+        #   @2. Row dominance elimination of dominated row
+        #   @3. Column dominace elimination of the dominating row
+        #
 
     def findprimes(self,minterms):
         #The tabular method for finding all the primes
