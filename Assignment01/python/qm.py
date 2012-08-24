@@ -18,11 +18,14 @@ class QuineMcClusky:
         self.vars=0 #no. of variables: to be parsed
         self.minterms=[] #to store the minterms : to be parsed
         self.reducedterms=[] #to store the output reducedterms
-        try:
-            self.fin=open(filename,"r") #open the file
-        except IOError:
-            print "Cannot open the file! Give another minterms file name!"
-            self.filename=raw_input("Filename :")
+        notgotfile=True
+        while notgotfile:
+            try:
+                self.fin=open(self.filename,"r") #open the file
+                notgotfile=False
+            except IOError:
+                print "Cannot open the file! Give another minterms file name!"
+                self.filename=raw_input("Filename :")
         self.getminterms()
         self.fin.close()
 
