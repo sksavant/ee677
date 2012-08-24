@@ -64,7 +64,6 @@ class QuineMcClusky:
         #@1: Find all the primes.
         self.primes=self.findprimes(self.minterms)
         #mpm is the matrix of primes and minterms
-        print len(self.primes),len(self.minterms)
         mpm=[[0 for i in range(len(self.primes))] for j in range(len(self.minterms))]
         #To implement the algorithm
         #@2:To do minimisation :
@@ -100,19 +99,62 @@ class QuineMcClusky:
                     mpm[minind][primeindex]=-1
                 for prind in range(len(self.primes)):
                     mpm[i][prind]=-1
-        self.print_mpmmatrix(mpm)
+        #self.print_mpmmatrix(mpm)
+        #Part 2 row dominance? : If a row is dominated by another, discard it
+        for i in range(len(self.minterms)):
+            for j in range(0,len(self.minterms)):
+                if self.rowdominates(i,j,mpm): #returns true is r1 dominates r2 i.e, r1 is one when r2 is one
+                    for k in range(len(self.primes)):
+                        mpm[j][k]=-1
+        #self.print_mpmmatrix(mpm)
+        #part 3 column dominance? : If a column dominates another column, discard it
+        for i in range(len(self.primes)):
+            for j in range(len(self.primes)):
+                if self.columndominates(i,j,mpm): #return true is c1 dominates c2 i.e, c1 is one when c2 is one
+                    for k in range(len(self.minterms)):
+                        mpm[k][i]=-1
+        #self.print_mpmmatrix(mpm)
+        #All the 3 minimisation techniques done. Now check for any primes left
+        for i in range(len(self.primes)):
+            for j in range(len(self.minterms)):
+                if mpm[j][i]==1:
+                    if not self.primes[i] in self.reducedterms:
+                        self.reducedterms.append(self.primes[i])
+
+    def columndominates(self,c1,c2,mpm):
+        if c1==c2:
+            return False
+        sum=0
+        for i in range(len(self.minterms)):
+            sum=sum+mpm[i][c2]
+            if mpm[i][c2]==1:
+                if mpm[i][c1]!=1:
+                    return False
+        if sum==-len(self.minterms):
+            return False
+        return True
+
+    def rowdominates(self,r1,r2,mpm):
+        if r1==r2:
+            return False
+        for i in range(len(self.primes)):
+            if mpm[r2][i]==1:
+                if mpm[r1][i]!=1:
+                    return False
+        return True
 
     def print_mpmmatrix(self,mpm):
         print "matrix"
-        line1="\t\t"
-        for e in self.primes:
-            line1=line1+str(e)+"\t"
-        print line1
+        line="\t\t"
+        for i in range(len(self.primes)):
+            print "prime "+str(i)+" "+str(self.primes[i])
+            line=line+"p"+str(i)+"\t"
+        print line
         for i in range(len(self.minterms)):
             line=str(self.minterms[i][0:self.vars])
-            line=line+"      "
+            line=line+"\t"
             for j in range(len(self.primes)):
-                line=line+str(mpm[i][j])+"\t\t"
+                line=line+str(mpm[i][j])+"\t"
             print line
         print "over"
 
@@ -213,6 +255,7 @@ class QuineMcClusky:
         return binaryterm[::-1]
 
     def print_reduced_terms(self): #used finally to print the reducedterms
+        print "The required reducedterms are"
         for e in self.reducedterms:
             print e
 
