@@ -63,6 +63,9 @@ class QuineMcClusky:
         #Steps are
         #@1: Find all the primes.
         self.primes=self.findprimes(self.minterms)
+        #mpm is the matrix of primes and minterms
+        print len(self.primes),len(self.minterms)
+        mpm=[[0 for i in range(len(self.primes))] for j in range(len(self.minterms))]
         #To implement the algorithm
         #@2:To do minimisation :
         #   3 steps
@@ -72,6 +75,52 @@ class QuineMcClusky:
         #   @2. Row dominance elimination of dominated row
         #   @3. Column dominace elimination of the dominating row
         #
+        for i in range(len(self.minterms)):
+            noofcoveringprimes=0
+            primeindex=-1
+            needtodeleteamintermrow=False
+            for j in range(len(self.primes)):
+                if self.covers(self.primes[j],self.minterms[i]):
+                    if not mpm[i][j]==-1:
+                        mpm[i][j]=1
+                        noofcoveringprimes=noofcoveringprimes+1
+                        primeindex=j
+                    else:
+                        needtodeleteamintermrow=True
+                        break
+            if needtodeleteamintermrow:
+                for prind in range(len(self.primes)):
+                    mpm[i][prind]=-1
+            elif noofcoveringprimes==1:
+                self.reducedterms.append(self.primes[primeindex])
+                #add the essential prime to reducedterms
+                #remove that row or col? or make all -1?
+                #then what? then check for dominance
+                for minind in range(len(self.minterms)):
+                    mpm[minind][primeindex]=-1
+                for prind in range(len(self.primes)):
+                    mpm[i][prind]=-1
+        self.print_mpmmatrix(mpm)
+
+    def print_mpmmatrix(self,mpm):
+        print "matrix"
+        line1="\t\t"
+        for e in self.primes:
+            line1=line1+str(e)+"\t"
+        print line1
+        for i in range(len(self.minterms)):
+            line=str(self.minterms[i][0:self.vars])
+            line=line+"      "
+            for j in range(len(self.primes)):
+                line=line+str(mpm[i][j])+"\t\t"
+            print line
+        print "over"
+
+    def covers(self,prime,minterm):
+        for i in range(self.vars):
+            if(prime[i]+minterm[i]==1):
+                return False
+        return True
 
     def findprimes(self,minterms):
         #The tabular method for finding all the primes
@@ -113,7 +162,7 @@ class QuineMcClusky:
                     elif nextterms[i][self.vars]+1<nextterms[j][self.vars]:
                         if nextterms[i][self.vars+1]==False:
                             notprimedyet=False
-                            #If not merged with any of the one difference ones, it's an essential prime. Append it to the prime list
+                            #I=-1f not merged with any of the one difference ones, it's an essential prime. Append it to the prime list
                             p.append(nextterms[i][0:self.vars])
                             break #breaks out of one for loop or both?
                 if notchecked and notprimedyet:
