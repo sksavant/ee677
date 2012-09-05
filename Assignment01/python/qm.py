@@ -66,7 +66,10 @@ class QuineMcClusky:
         #Steps are
         #@1: Find all the primes.
         self.primes=self.findprimes(self.minterms)
+        #for e in self.primes:
+        #    print e
         #mpm is the matrix of primes and minterms
+        #return
         mpm=[[0 for i in range(len(self.primes))] for j in range(len(self.minterms))]
         #To implement the algorithm
         #@2:To do minimisation :
@@ -262,11 +265,11 @@ class QuineMcClusky:
         for e in self.reducedterms:
             print e
 
-    def print_reduced_terms_tofile(self):
+    def print_reduced_terms_tofile(self,terms):
         fout=open("result.txt","w")
-        for e in self.reducedterms:
+        for e in terms:
             strminterm=""
-            for x in e:
+            for x in reversed(e):
                 if not x==-1:
                     strminterm=strminterm+str(x)
                 else:
@@ -282,4 +285,5 @@ if __name__=="__main__":
     qm.do_quinemcclusky()
     #print the reduceedterms
     #qm.print_reduced_terms()
-    qm.print_reduced_terms_tofile()
+    #qm.print_reduced_terms_tofile(qm.reducedterms)
+    qm.print_reduced_terms_tofile(qm.primes)
