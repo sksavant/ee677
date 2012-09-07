@@ -210,7 +210,7 @@ class QuineMcClusky:
                     elif nextterms[i][self.vars]+1<nextterms[j][self.vars]:
                         if nextterms[i][self.vars+1]==False:
                             notprimedyet=False
-                            #I=-1f not merged with any of the one difference ones, it's an essential prime. Append it to the prime list
+                            #If not merged with any of the one difference ones, it's an essential prime. Append it to the prime list
                             p.append(nextterms[i][0:self.vars])
                             break #breaks out of one for loop or both?
                 if notchecked and notprimedyet:
