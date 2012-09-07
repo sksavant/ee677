@@ -1,0 +1,30 @@
+Quine-McClusky implementation and finding the minimum set-cover
+
+Written by S Krishna Savant (100070056)
+
+**************************************************************
+##############################################################
+Running the program
+
+    $ sh run.sh
+
+##############################################################
+What is what?
+
+*All files are in the folder python
+*The algorithm is implemented in the file 'qm.py'
+*The input is from 'minterms.txt' file. The format of the input
+ is as follows:
+    vars = <variable_no>
+    minterms = <.>,<.>,<.>,...,<.>
+    //where each <.> is a number
+*The output is written to "result.txt"
+ Output is the minimal representation of function, after finding 
+ all the primes and making reductions:
+    Essential Primes
+    Row dominance
+    Column dominance
+*"result_primes.txt" contains all the primes of the function 
+ without any reduction done.
+*The output is LSB first.
+##############################################################
