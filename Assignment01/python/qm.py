@@ -11,6 +11,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
+import sys
 
 class QuineMcClusky:
     def __init__(self,filename):
@@ -49,6 +50,10 @@ class QuineMcClusky:
             return
         try:
             self.minterms=map(int,line[11:len(line)-2].split(','))
+            for term in self.minterms:
+                if term >= 2**self.vars:
+                    print "Are they minterms? You need more variables"
+                    sys.exit()
             #Eg : minterms = 0,1,2,5,7,8,9,10,13,15,
             #gets the minterms into a list of int
         except ValueError:
@@ -265,8 +270,8 @@ class QuineMcClusky:
         for e in self.reducedterms:
             print e
 
-    def print_reduced_terms_tofile(self,terms):
-        fout=open("result.txt","w")
+    def print_reduced_terms_tofile(self,terms,filename):
+        fout=open(filename,"w")
         for e in terms:
             strminterm=""
             for x in reversed(e):
@@ -280,10 +285,10 @@ class QuineMcClusky:
 
 if __name__=="__main__":
     #call a instance of the class QuineMcClusky with the filename of minterms.txt
-    qm=QuineMcClusky("../clang/minterms.txt")
+    qm=QuineMcClusky("minterms.txt")
     #call the do_quinemcclusky method which will compute the reducedterms
     qm.do_quinemcclusky()
     #print the reduceedterms
     #qm.print_reduced_terms()
-    #qm.print_reduced_terms_tofile(qm.reducedterms)
-    qm.print_reduced_terms_tofile(qm.primes)
+    qm.print_reduced_terms_tofile(qm.reducedterms,"result.txt")
+    qm.print_reduced_terms_tofile(qm.primes,"result_primes.txt")
