@@ -25,8 +25,10 @@ class QuineMcClusky:
                 self.fin=open(self.filename,"r") #open the file
                 notgotfile=False
             except IOError:
-                print "Cannot open the file! Give another minterms file name!"
-                self.filename=raw_input("Filename :")
+                #print "Cannot open the file! Give another minterms file name!"
+                self.filename=sys.argv[1]
+                #print self.filename
+                #self.filename=raw_input("Filename :")
         self.getminterms()
         self.fin.close()
 
